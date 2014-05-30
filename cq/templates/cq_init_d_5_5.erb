@@ -1,0 +1,37 @@
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides: <%= @installation_type %>
+# Required-Start:
+# Required-Stop:
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: start and stop <%= @installation_type %>
+# Description: start and stop <%= @installation_type %>
+### END INIT INFO
+
+case "$1" in
+ #---------------------------------------------------------------------
+ start)
+	<%= @install_path %>/<%= @installation_type %>/crx-quickstart/bin/start
+    ;;
+#---------------------------------------------------------------------
+  stop)
+        <%= @install_path %>/<%= @installation_type %>/crx-quickstart/bin/stop
+    ;;
+#---------------------------------------------------------------------
+  'status')
+		cqpid=`/bin/cat "<%= @install_path %>/<%= @installation_type %>/crx-quickstart/conf/cq.pid" 2>/dev/null`
+		if ps -p $cqpid > /dev/null 2>&1 ; then
+			echo "CQ is running."
+			exit 0
+		else
+			echo "CQ is stopped."
+			exit 1;
+		fi
+  ;; 
+  *)
+        echo "Usage: $NAME {start|stop|status}" >&2
+        exit 3
+    ;;
+esac

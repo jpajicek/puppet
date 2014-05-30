@@ -1,0 +1,75 @@
+#!/bin/bash
+#
+# This script configures the start information for this server.
+#
+# The following variables may be used to override the defaults.
+# For one-time overrides the variable can be set as part of the command-line; e.g.,
+#
+#     % CQ_PORT=1234 ./start
+#
+
+# TCP port used for stop and status scripts
+CQ_PORT=<%= @cq_port %>
+
+# HTTP host name
+# CQ_HOST=
+
+# interface that this server should listen to
+#CQ_INTERFACE='eth0'
+
+# runmode(s)
+CQ_RUNMODE='<%= @sling_run_modes %>'
+
+# name of the jarfile
+#CQ_JARFILE=''
+
+# use jaas.config
+# CQ_USE_JAAS='true'
+
+# config for jaas
+CQ_JAAS_CONFIG='etc/jaas.config'
+
+# default JVM options
+CQ_JVM_OPTS='-server -Xms<%= @min_heap %>m -Xmx<%= @max_heap %>m -XX:MaxPermSize=<%= @perm_gen %>m -Djava.awt.headless=true'
+
+# file size limit (ulimit)
+CQ_FILE_SIZE_LIMIT=8192
+
+# ------------------------------------------------------------------------------
+# do not configure below this point
+# ------------------------------------------------------------------------------
+
+if [ $CQ_FILE_SIZE_LIMIT ]; then
+	CURRENT_ULIMIT=`ulimit`
+	if [ $CURRENT_ULIMIT != "unlimited" ]; then
+		if [ $CURRENT_ULIMIT -lt $CQ_FILE_SIZE_LIMIT ]; then
+			echo "ulimit ${CURRENT_ULIMIT} is too small (must be at least ${CQ_FILE_SIZE_LIMIT})"
+			exit 1
+		fi
+	fi
+fi
+
+BIN_PATH=$(dirname $0)
+cd $BIN_PATH/..
+START_OPTS='start -c . -i launchpad'
+if [ $CQ_PORT ]; then
+	START_OPTS="${START_OPTS} -p ${CQ_PORT}"
+fi
+if [ $CQ_INTERFACE ]; then
+	START_OPTS="${START_OPTS} -a ${CQ_INTERFACE}"
+fi
+if [ $CQ_RUNMODE ]; then
+	START_OPTS="${START_OPTS} -Dsling.run.modes=${CQ_RUNMODE}"
+fi
+if [ $CQ_HOST ]; then
+    START_OPTS="${START_OPTS} -Dorg.apache.felix.http.host=${CQ_HOST}"
+fi
+if [ $CQ_USE_JAAS ]; then
+    START_OPTS="${START_OPTS} -Djava.security.auth.login.config=${CQ_JAAS_CONFIG}"
+fi
+if [ -z $CQ_JARFILE ]; then
+	CQ_JARFILE=`ls app/*.jar | head -1`
+fi
+
+nohup java $CQ_JVM_OPTS -jar $CQ_JARFILE $START_OPTS > logs/nohup.out 2>&1  &
+        echo $! > "conf/cq.pid"

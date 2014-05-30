@@ -1,0 +1,60 @@
+## THIS FILE IS HANDLED BY PUPPET, DO NOT EDIT
+
+#------------------------------------------------------------#
+# CentrifyDC Core Configuration                              #
+# Configured By: Daniel Mitchell <daniel.mitchell@akqa.com>  #
+# -----------------------------------------------------------#
+
+# logging level
+log: INFO
+
+# Allow these users to authenticate locally.
+pam.allow.override: root
+pam.allow.override: barry
+
+# Allow a specific list of users and/or groups to log into this computer.
+pam.allow.groups: file:/etc/centrifydc/groups.allow
+
+# Named LRPC socket through which clients communicate with adclient.
+adclient.clients.socket: /var/centrifydc/daemon
+
+# Named LRPC2 socket through which clients communicate with adclient.
+adclient.clients.socket2: /var/centrifydc/daemon2
+
+# AdClient Cache Refresh Rate
+adclient.cache.expires: 180
+
+# Attributes that are applied to user objects
+adclient.custom.attributes.user: unixUserPassword msSFU30Password
+
+# What's the name of the system nobody user
+nss.nobody.user: nobody
+nss.nobody.group: nobody
+
+# DO NOT use -1 here.  See setresuid().
+nss.nobody.uid: 99
+nss.nobody.gid: 99
+
+# Don't call Centrify group or user iteration for these programs
+# This helps prevent adding local users and groups that conflict with
+# DirectControl users in AD
+nss.program.ignore: useradd,adduser,groupadd,addgroup,userdel,groupdel,usermod,groupmod,chfn,chsh,chpasswd,gpasswd,pwconv,pwunconv,grpconv,grpunconv,redhat-config-users
+
+nss.shell.nologin: /bin/false
+
+#
+# These parameters define the default value of the %{home}, %{shell}, %{zone},
+# %{host}, %{site}, %{domain} runtime variables which are used to define the their
+# default values.
+# These values are only used if they where not previous defined within
+# a zone definitition or by the configuration setting nss.runtime.var.xxx
+nss.runtime.defaultvalue.var.home: /home
+nss.runtime.defaultvalue.var.shell: /bin/bash
+nss.runtime.defaultvalue.var.zone: $ZONE
+nss.runtime.defaultvalue.var.host: $HOSTNAME
+nss.runtime.defaultvalue.var.site: $SITE
+nss.runtime.defaultvalue.var.domain: $DOMAIN
+secedit.system.access.lockoutbadcount: 5
+secedit.system.access.lockoutduration: 15
+secedit.system.access.maximumpasswordage: 60
+secedit.system.access.minimumpasswordage: 0

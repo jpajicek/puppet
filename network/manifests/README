@@ -1,0 +1,18 @@
+# Joining Domain CentrifyDC 
+# network::centrifydc
+# Email: pavel.jedlicka@akqa.com
+
+
+Examples:
+
+network::centrifydc
+
+Join Domain
+-----------
+ class {"network::centrifydc": ensure => join, domain => "domain.local", group_allow => ['users','domain_admins'], ou => "uat.uk.akqa/computers", svc_user => 'joindomain', dns_server => "10.2.30.50"}
+
+Leave Domain 
+------------	
+ class {"network::centrifydc": ensure => leave }
+
+
