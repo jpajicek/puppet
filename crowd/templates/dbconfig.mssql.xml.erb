@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application-configuration>
+  <setupStep>complete</setupStep>
+  <setupType>install.xml</setupType>
+  <buildNumber><%= scope.lookupvar('crowd::build') %></buildNumber>
+  <properties>
+    <property name="crowd.server.id"><%= scope.lookupvar('crowd::serverid') %></property>
+    <property name="hibernate.c3p0.acquire_increment">1</property>
+    <property name="hibernate.c3p0.idle_test_period">100</property>
+    <property name="hibernate.c3p0.max_size">30</property>
+    <property name="hibernate.c3p0.max_statements">0</property>
+    <property name="hibernate.c3p0.min_size">0</property>
+    <property name="hibernate.c3p0.timeout">30</property>
+    <property name="hibernate.connection.driver_class"><%= scope.lookupvar('crowd::dbdriver') %></property>
+    <property name="hibernate.connection.password"><%= scope.lookupvar('crowd::dbpassword') %></property>
+    <property name="hibernate.connection.url"><%= scope.lookupvar('crowd::dburl') %></property>
+    <property name="hibernate.connection.username"><%= scope.lookupvar('crowd::dbuser') %></property>
+    <property name="hibernate.dialect">org.hibernate.dialect.SQLServerDialect</property>
+    <property name="hibernate.setup">true</property>
+    <property name="license"><%= scope.lookupvar('crowd::license') %></property>
+</properties>
+</application-configuration>

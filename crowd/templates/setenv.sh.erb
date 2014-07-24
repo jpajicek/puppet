@@ -1,0 +1,3 @@
+JAVA_OPTS="-Xms<%= scope.lookupvar('crowd::jvm_xms') %> -Xmx<%= scope.lookupvar('crowd::jvm_xmx') %> -XX:MaxPermSize=<%= scope.lookupvar('crowd::jvm_MaxPermSize') %> -Dfile.encoding=UTF-8 $JAVA_OPTS"
+
+export JAVA_OPTS
