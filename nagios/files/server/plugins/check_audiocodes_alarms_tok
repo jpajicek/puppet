@@ -1,0 +1,60 @@
+#!/bin/bash
+
+result_Ok=0
+result_exit_Ok=0
+result_exit_Warning=1
+result_exit_Critical=2
+result=0
+invalid=0
+
+ipaddr=$1
+
+id='Admin'
+pass='Admin'
+
+rm -f /tmp/audioalarms-$ipaddr.txt
+rm -f /tmp/audioalarms2-$ipaddr.txt
+
+/usr/bin/expect <<EOF > /dev/null
+set timeout 10
+
+spawn ssh -o StrictHostKeyChecking=no $id@$ipaddr
+expect "*password: "
+send "$pass\n"
+expect ">"
+
+log_file /tmp/audioalarms-$ipaddr.txt
+send "show system active-alarms\r"
+expect ">"
+log_file
+send "exit\r"
+
+EOF
+
+grep -v Board#1/Ethernet /tmp/audioalarms-$ipaddr.txt > /tmp/audioalarms2-$ipaddr.txt 
+
+result=`cat /tmp/audioalarms2-$ipaddr.txt | grep -E 'minor|major|critical' | wc -l`
+
+if [ $result -gt $result_Ok ]; then
+        grep minor /tmp/audioalarms2-$ipaddr.txt | awk '{print $0}'
+
+        result=`cat /tmp/audioalarms2-$ipaddr.txt | grep major | wc -l`
+
+                if [ $result -gt $result_Ok ]; then
+                        grep major /tmp/audioalarms2-$ipaddr.txt | awk '{print $0}'
+                        exit $result_exit_Critical
+                fi
+
+        result=`cat /tmp/audioalarms2-$ipaddr.txt | grep critical | wc -l`
+
+                if [ $result -gt $result_Ok ]; then
+                        grep critical /tmp/audioalarms2-$ipaddr.txt | awk '{print $0}'    
+                        exit $result_exit_Critical
+                fi
+        exit $result_exit_Warning
+fi
+
+if [ $result -eq $result_Ok ]; then
+	echo "OK"
+	exit $result_exit_Ok
+fi

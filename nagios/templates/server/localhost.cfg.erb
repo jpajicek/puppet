@@ -1,0 +1,8 @@
+### THIS FILE IS HANDLED BY PUPPET, DO NOT EDIT
+
+define host{
+        use                     generic-lon-host            ; Name of host template to use
+        host_name               <%= @hostname %>
+        alias                   <%= @hostname %>
+        address                 <%= @ipaddress %>
+}

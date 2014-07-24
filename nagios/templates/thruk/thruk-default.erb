@@ -1,0 +1,20 @@
+## THIS FILE IS MANAGED BY PUPPET
+
+############################################
+# put your own settings into this file
+# settings from this file will override
+# those from the thruk.conf
+############################################
+
+<Component Thruk::Backend>
+    <peer>
+        name    = EMEA
+        id      = f6aec
+        type    = livestatus
+        <options>
+            peer          = /var/lib/nagios3/livestatus.sock
+        </options>
+    </peer>
+</Component>
+start_page=/thruk/cgi-bin/tac.cgi
+default_theme       = Exfoliation

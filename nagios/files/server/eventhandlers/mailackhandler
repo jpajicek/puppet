@@ -1,0 +1,28 @@
+#!/bin/bash
+
+NOW=`date +%s`
+
+case "$2" in
+ HARD)
+        case "$1" in
+        CRITICAL|DOWN)
+                /usr/bin/printf "%b" "[$NOW] SEND_CUSTOM_SVC_NOTIFICATION;ldnxvmon01;mailACK;0;nagiosadmin;Auto-Recovered" > /var/lib/nagios3/rw/nagios.cmd 
+                sudo /etc/init.d/nagiosmailack restart
+                sudo /etc/init.d/monit restart
+                ;;
+
+        WARNING|UNKNOWN)
+
+                # Just sit tight
+                ;;
+
+        OK|UP)
+                # all happy
+
+                ;;
+        esac
+        ;;
+
+esac
+
+exit 0

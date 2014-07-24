@@ -1,0 +1,108 @@
+#!/usr/bin/perl -w
+#
+# $Hashbang: check_tacacs_plus.pl,v 1.2 2004/12/15 15:42:01 pfarmer Exp $
+#
+# Copyright Notice: GPL
+#
+# $Id: check_tacacs_plus.pl,v 1.2 2004/12/15 15:42:01 pfarmer Exp $
+#
+
+use strict;
+use lib "/usr/lib/nagios/plugins";
+use utils qw($TIMEOUT %ERRORS &print_revision &support);
+use Authen::TacacsPlus;
+use Getopt::Long;
+use vars qw($opt_V $opt_h $opt_H $opt_t $opt_k $opt_u $opt_p $verbose
+$PROGNAME);
+
+
+$PROGNAME = "check_tacacs_plus";
+sub print_help ();
+sub print_usage ();
+
+Getopt::Long::Configure('bundling');
+GetOptions(
+"V" => \$opt_V, "version" => \$opt_V,
+"h" => \$opt_h, "help" => \$opt_h,
+"t=i" => \$opt_t, "timeout=i" => \$opt_t,
+"H=s" => \$opt_H, "hostname=s" => \$opt_H,
+"k=s" => \$opt_k, "key=s" => \$opt_k,
+"u=s" => \$opt_u, "username=s" => \$opt_u,
+"p=s" => \$opt_p, "password=s" => \$opt_p,
+"v" => \$verbose,"verbose" => \$verbose
+);
+
+if ($opt_V) {
+print_revision($PROGNAME,'$Revision: 1.2 $ ');
+exit $ERRORS{'OK'};
+}
+
+if ($opt_h) {
+print_help();
+exit $ERRORS{'OK'};
+}
+
+if (!$opt_H) {
+print "Host missing!\n";
+print_usage();
+exit $ERRORS{'UNKNOWN'};
+}
+
+if (!$opt_k) {
+print_usage();
+exit $ERRORS{'UNKNOWN'};
+}
+
+if (!$opt_u) {
+print_usage();
+exit $ERRORS{'UNKNOWN'};
+}
+
+if (!$opt_p) {
+print_usage();
+exit $ERRORS{'UNKNOWN'};
+}
+
+if (!$opt_t) {
+$opt_t = 60;
+}
+
+my $tac = new Authen::TacacsPlus(Host => $opt_H, Key => $opt_k, Timeout
+=> $opt_t);
+unless ($tac){
+print "CRITICAL: ",Authen::TacacsPlus::errmsg(),"\n";
+exit $ERRORS{'CRITICAL'};
+}
+if ($tac->authen($opt_u,$opt_p)){
+print "OK: Tacacs Authentication OK\n";
+exit $ERRORS{'OK'};
+} else {
+print "WARNING: ",Authen::TacacsPlus::errmsg(),"\n";
+exit $ERRORS{'WARNING'};
+}
+$tac->close();
+
+
+sub print_help() {
+print_revision($PROGNAME,'$Revision: 1.2 $ ');
+print "Copyright (c) 2004 Peter Farmer/Mark Cooper\n";
+print "\n";
+print "Check if a tacacs service is running and that a user can
+authenticate\n";
+print "\n";
+print_usage();
+print "\n";
+print " <host> The server providing the tacacs service\n";
+print " <key> The tacacs key\n";
+print " <user> A username that will authenticate OK with tacacs\n";
+print " <password> The password for <user>\n";
+print "\n";
+support();
+}
+
+sub print_usage () {
+print "Usage: \n";
+print " $PROGNAME -H host -k key -u user -p password\n";
+print " $PROGNAME [-h | --help]\n";
+print " $PROGNAME [-V | --version]\n";
+}

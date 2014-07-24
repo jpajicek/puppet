@@ -1,0 +1,194 @@
+## THIS FILE IS HANDLED BU PUPPET, DO NOT EDIT
+
+###############################################################################
+#
+#  Mod-Gearman - distribute checks with gearman
+#
+#  Copyright (c) 2010 Sven Nierlein
+#
+#  Mod-Gearman NEB Module Config
+#
+###############################################################################
+
+# use debug to increase the verbosity of the module.
+# Possible values are:
+#     0 = only errors
+#     1 = debug messages
+#     2 = trace messages
+#     3 = trace and all gearman related logs are going to stdout.
+# Default is 0.
+debug=<%= @debug %>
+
+# Path to the logfile.
+logfile=/var/log/mod_gearman_neb.log
+
+# sets the addess of your gearman job server. Can be specified
+# more than once to add more server.
+server=<%= @jobserver %>
+
+
+# sets the address of your 2nd (duplicate) gearman job server. Can
+# be specified more than once o add more servers.
+# dupserver=<host>:<port>
+<% if @dupserver %>
+dupserver=<%= @dupserver %>
+<% end %>
+
+# defines if the module should distribute execution of
+# eventhandlers.
+# eventhandler=yes
+<% if @eventhandler %>
+eventhandler=yes      
+<% end %>
+
+# defines if the module should distribute execution of
+# service checks.
+# services=yes
+<% if @services %>
+services=yes              
+<% end %>
+
+# defines if the module should distribute execution of
+# host checks.
+# hosts=yes
+<% if @hosts %>
+hosts=yes
+<% end %>
+
+# sets a list of hostgroups which will go into seperate
+# queues. Either specify a comma seperated list or use
+# multiple lines.
+#hostgroups=name2,name3
+<% if @hostgroups %>
+hostgroups=<%= @hostgroups %>
+<% end %>
+
+# sets a list of servicegroups which will go into seperate
+# queues.
+#servicegroups=name1,name2,name3
+<% if @servicegroups %>
+servicegroups=<%= @servicegroups %>
+<% end %>
+
+# Set this to 'no' if you want Mod-Gearman to only take care of
+# servicechecks. No hostchecks will be processed by Mod-Gearman. Use
+# this option to disable hostchecks and still have the possibility to
+# use hostgroups for easy configuration of your services.
+# If set to yes, you still have to define which hostchecks should be
+# processed by either using 'hosts' or the 'hostgroups' option.
+# Default is Yes.
+do_hostchecks=yes
+
+# This settings determines if all eventhandlers go into a single
+# 'eventhandlers' queue or into the same queue like normal checks
+# would do.
+route_eventhandler_like_checks=no
+
+# enables or disables encryption. It is strongly
+# advised to not disable encryption. Anybody will be
+# able to inject packages to your worker.
+# Encryption is enabled by default and you have to
+# explicitly disable it.
+# When using encryption, you will either have to
+# specify a shared password with key=... or a
+# keyfile with keyfile=...
+# Default is On.
+encryption=<%= @encryption %>
+
+
+# A shared password which will be used for
+# encryption of data pakets. Should be at least 8
+# bytes long. Maximum length is 32 characters.
+key=<%= @key %>
+
+
+# The shared password will be read from this file.
+# Use either key or keyfile. Only the first 32
+# characters will be used.
+#keyfile=/path/to/secret.file
+
+
+# use_uniq_jobs
+# Using uniq keys prevents the gearman queues from filling up when there
+# is no worker. However, gearmand seems to have problems with the uniq
+# key and sometimes jobs get stuck in the queue. Set this option to 'off'
+# when you run into problems with stuck jobs but make sure your worker
+# are running.
+use_uniq_jobs=<%= @use_uniq_jobs %>
+
+
+
+###############################################################################
+#
+# NEB Module Config
+#
+# the following settings are for the neb module only and
+# will be ignored by the worker.
+#
+###############################################################################
+
+# sets a list of hostgroups which will not be executed
+# by gearman. They are just passed through.
+# Default is none
+localhostgroups=<%= @localhostgroups %>
+
+
+# sets a list of servicegroups which will not be executed
+# by gearman. They are just passed through.
+# Default is none
+localservicegroups=<%= @localservicegroups %>
+
+# The queue_custom_variable can be used to define the target queue
+# by a custom variable in addition to host/servicegroups. When set
+# for ex. to 'WORKER' you then could define a '_WORKER' custom
+# variable for your hosts and services to directly set the worker
+# queue. The host queue is inherited unless overwritten
+# by a service custom variable. Set the value of your custom
+# variable to 'local' to bypass Mod-Gearman (Same behaviour as in
+# localhostgroups/localservicegroups).
+#queue_custom_variable=WORKER
+<% if @queue_custom_variable %>
+queue_custom_variable=<%= @queue_custom_variable %>
+<% end %>
+
+# Number of result worker threads. Usually one is
+# enough. You may increase the value if your
+# result queue is not processed fast enough.
+# Default: 1
+result_workers=<%= @result_workers %>
+
+
+# defines if the module should distribute perfdata
+# to gearman.
+# Note: processing of perfdata is not part of
+# mod_gearman. You will need additional worker for
+# handling performance data. For example: pnp4nagios
+# Performance data is just written to the gearman
+# queue.
+# Default: no
+perfdata=<%= @perfdata %>
+
+# perfdata mode overwrite helps preventing the perdata queue getting to big
+# 1 = overwrote
+# 2 = append
+perfdata_mode=<%= @perfdata_mode %>
+
+# The Mod-Gearman NEB module will submit a fake result for orphaned host
+# checks with a message saying there is no worker running for this
+# queue. Use this option to get better reporting results, otherwise your
+# hosts will keep their last state as long as there is no worker
+# running.
+# Default: yes
+orphan_host_checks=<%= @orphan_host_checks %>
+
+# Same like 'orphan_host_checks' but for services.
+# Default: yes
+orphan_service_checks=<%= @orphan_service_checks %>
+
+# When accept_clear_results is enabled, the NEB module will accept unencrypted
+# results too. This is quite useful if you have lots of passive checks and make
+# use of send_gearman/send_multi where you would have to spread the shared key to
+# all clients using these tools.
+# Default is no.
+accept_clear_results=<%= @accept_clear_results %>
+

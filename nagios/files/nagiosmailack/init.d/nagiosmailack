@@ -1,0 +1,61 @@
+#!/bin/sh
+#
+# chkconfig: 345 99 01
+#
+#
+# description: Service script for Nagios Mail ACK
+# Author: pavel.jedlicka@akqa.com
+
+
+# source function library
+. /lib/lsb/init-functions
+
+BINDIR=/usr/bin/nagMailAck
+DAEMON=$BINDIR/nagMailACK.rb
+PIDFILE=/var/run/nagiosmainack.pid
+DESC="Nagios Mail ACK"
+NAME=nagiosmailack
+
+if [ ! -e $BINDIR/nagMailACK.rb ]; then
+        echo "nagMailACK.rb not found @"$BINDIR"/"
+        exit 1
+fi
+
+# Create pidfile if does not exist
+[ -f $PIDFILE ] || touch $PIDFILE
+
+case "$1" in
+        start)
+                if ps -p `cat $PIDFILE` > /dev/null 2>&1
+        	then
+        		echo "$DESC is already running"
+        	else
+        		echo -n "Starting $DESC: "
+                	start-stop-daemon --start -b -m --pidfile $PIDFILE --exec /usr/bin/ruby $DAEMON 
+                	echo -n "OK.\n"
+		fi
+                ;;
+        stop)
+		echo -n "Stopping $DESC: "
+        	start-stop-daemon --stop --quiet --pidfile $PIDFILE --retry=TERM/35/KILL/5
+		echo "OK."
+                ;;
+        status)
+		ret=0
+        	ps -p `cat $PIDFILE` > /dev/null 2>&1 || ret=$?
+        	case $ret in
+                        0)  echo " $NAME is running" ;;
+                        *)  echo " $NAME is not running"
+        	esac
+        	exit $ret
+                ;;
+        restart)
+                $0 stop
+                $0 start
+                ;;
+        *)
+                echo "Usage: $0 {start|stop|status|restart}"
+                exit 1
+esac
+exit 0
+
