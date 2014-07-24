@@ -1,0 +1,10 @@
+Module for configuring Monit and and setting up monitoring of running processes
+
+
+example:
+	
+class { "monit": monitint => '120' } 	
+monit::service { 'fail2ban': }
+
+  
+       

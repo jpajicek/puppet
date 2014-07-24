@@ -1,0 +1,5 @@
+check process nagiosMailAck with pidfile /var/run/nagiosmainack.pid
+start program = "/etc/init.d/nagiosmailack start"
+stop program = "/etc/init.d/nagiosmailack stop"
+if changed ppid then restart
+if 5 restarts within 5 cycles then timeout
