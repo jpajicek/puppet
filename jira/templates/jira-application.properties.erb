@@ -1,0 +1,4 @@
+# This File is handled by puppet
+# Do not modify this file unless instructed. It is here to store the location of the JIRA home directory only and is typically written to by the installer.
+jira.home = <%= scope.lookupvar('jira::homedir') %>
+jira.websudo.timeout = 30
