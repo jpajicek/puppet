@@ -1,0 +1,90 @@
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides: confluence
+# Required-Start: 
+# Required-Stop: 
+# Should-Start: 
+# Should-Stop: 
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Short-Description: Start up CONFLUENCE
+# Description:       Atlassian CONFLUENCE Issue Tracking and Project Management
+#                    This service starts up the tomcat webapp.
+### END INIT INFO
+ACTION=$1
+SERVICE=confluence
+lockfile=/var/lock/$SERVICE
+
+
+export JAVA_HOME=<%= scope.lookupvar('confluence::javahome') %>
+export CATALINA_HOME=<%= scope.lookupvar('confluence::confluenceadir') %>
+
+
+function restart() {
+  stop
+  start
+}
+
+function stop() {
+  echo -n $"Shutting down $SERVICE: "
+  <%= scope.lookupvar('confluence::confluencedir') %>/bin/stop-confluence.sh
+  RETVAL=$?
+  echo
+
+  #If all is well remove the lockfile
+  [ $RETVAL -eq 0 ] && rm -f $lockfile
+  return $RETVAL
+}
+
+function start() {
+  echo -n $"Starting $SERVICE: "
+  <%= scope.lookupvar('confluence::confluencedir') %>/bin/start-confluence.sh
+  RETVAL=$?
+  echo
+
+  #If all is well touch the lock file
+  [ $RETVAL -eq 0 ] && touch $lockfile
+  return $RETVAL
+}
+
+function status() {
+
+  STATUS=$( ps aux | grep "[c]atalina.base=$CATALINA_HOME" | wc -l )
+  if [ $STATUS -gt 0 ];then
+    ps -ef |grep $SERVICE |grep -v grep |awk '{ print $2 }' | <%= scope.lookupvar('confluence::javahome') %>/bin/jps |grep -v Jps |grep -v grep > /dev/null
+    RETVAL=$?
+    if [ $RETVAL -eq 0 ];then
+      echo "$SERVICE is running"
+      return $RETVAL
+    else
+      echo "$SERVICE is stopped"
+      return $RETVAL
+    fi
+  else
+    echo "$SERVICE is stopped"
+    return 1
+ fi
+  
+}
+
+function execute() {
+  case "$ACTION" in
+    start)
+      start
+      ;;
+    stop)
+      stop
+      ;;
+    status)
+      status
+      ;;
+    restart)
+      restart
+      ;;
+    *)
+      echo "Usage: $0 {start|stop|status|restart}"
+      exit 1
+  esac
+}
+
+execute
