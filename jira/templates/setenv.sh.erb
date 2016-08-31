@@ -11,14 +11,17 @@ JVM_SUPPORT_RECOMMENDED_ARGS="<%= scope.lookupvar('jira::jvm_optional') %>"
 #
 # The following 2 settings control the minimum and maximum given to the JIRA Java virtual machine.  In larger JIRA instances, the maximum amount will need to be increased.
 #
-JVM_MINIMUM_MEMORY="256m"
+JVM_MINIMUM_MEMORY="<%= scope.lookupvar('jira::jvm_xms') %>"
 JVM_MAXIMUM_MEMORY="<%= scope.lookupvar('jira::jvm_xmx') %>"
 
 #
 # The following are the required arguments for JIRA.
 #
+<% if @version =~ /^[5,6].[0-9].[0-9]{1,2}/ %>
 JVM_REQUIRED_ARGS="-Djava.awt.headless=true -Datlassian.standalone=JIRA -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true -Dmail.mime.decodeparameters=true"
-
+<% else %> 
+JVM_REQUIRED_ARGS='-Djava.awt.headless=true -Datlassian.standalone=JIRA -Dorg.apache.jasper.runtime.BodyContentImpl.LIMIT_BUFFER=true -Dmail.mime.decodeparameters=true -Dorg.dom4j.factory=com.atlassian.core.xml.InterningDocumentFactory'
+<% end %>
 # Uncomment this setting if you want to import data without notifications
 #
 #DISABLE_NOTIFICATIONS=" -Datlassian.mail.senddisabled=true -Datlassian.mail.fetchdisabled=true -Datlassian.mail.popdisabled=true"
@@ -34,7 +37,7 @@ JVM_REQUIRED_ARGS="-Djava.awt.headless=true -Datlassian.standalone=JIRA -Dorg.ap
 # This allows us to actually debug GC related issues by correlating timestamps
 # with other parts of the application logs.
 #-----------------------------------------------------------------------------------
-JVM_EXTRA_ARGS="-XX:+PrintGCDateStamps"
+JVM_EXTRA_ARGS="-XX:+PrintGCDateStamps -Datlassian.plugins.enable.wait=300"
 
 PRGDIR=`dirname "$0"`
 cat "${PRGDIR}"/jirabanner.txt

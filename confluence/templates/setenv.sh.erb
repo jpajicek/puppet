@@ -1,6 +1,6 @@
 # This file is handled by puppet, do not edit
 
-JAVA_OPTS="-Xms<%= scope.lookupvar('confluence::jvm_xms') %> -Xmx<%= scope.lookupvar('confluence::jvm_xmx') %> -XX:MaxPermSize=512m $JAVA_OPTS -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9005 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.awt.headless=true -XX:+UseParallelOldGC"
+JAVA_OPTS="-Xms<%= scope.lookupvar('confluence::jvm_xms') %> -Xmx<%= scope.lookupvar('confluence::jvm_xmx') %> -XX:MaxPermSize=<%= scope.lookupvar('confluence::max_perm_size') %> $JAVA_OPTS -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=9005 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.awt.headless=true -XX:+UseParallelOldGC"
 export JAVA_OPTS
 
 echo "If you encounter issues starting up Confluence Standalone, please see the Installation guide at http://confluence.atlassian.com/display/DOC/Confluence+Installation+Guide"

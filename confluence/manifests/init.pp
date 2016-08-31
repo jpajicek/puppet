@@ -14,6 +14,9 @@ class confluence (
   $user         	= 'confluence',
   $group        	= 'confluence',
   $webappcontextpath	= '/collaboration',
+  $proxyname		= '',
+  $proxyport		= '443',
+  $scheme		= 'https',
 
   # Database Settings
   $db           	= 'mssql',
@@ -30,6 +33,7 @@ class confluence (
   $javahome		= '/usr/lib/jvm/java-6-sun',
   $jvm_xmx      	= '2048m',
   $jvm_xms 		= '1024m',
+  $max_perm_size	= '512m',
 
   # Misc Settings
   $downloadURL  = 'http://www.atlassian.com/software/confluence/downloads/binary/'

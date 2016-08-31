@@ -1,0 +1,36 @@
+ # This File is handled by puppet
+
+# This file allows you to set the directory for bitbucket to store its configuration files.
+#
+###########################
+# Note for Windows Users  #
+###########################
+#
+# Each backslash in your path must be written as a forward slash.
+# - For example:
+# c:\bitbucket\data
+#
+# should be written as:
+#
+# c:/bitbucket/data
+###########################
+# Note for Unix Users     #
+###########################
+# - For example:
+# bitbucket.home = <%= scope.lookupvar('bitbucket::homedir') %>
+#
+# NOTE: If the path of your bitbucket.home directory contains symlinks,
+# please set bitbucket.home to the absolute path, otherwise problems may occur.
+# - For example:
+# bitbucket.home = <%= scope.lookupvar('bitbucket::homedir') %>
+# should be written as:
+# bitbucket.home = <%= scope.lookupvar('bitbucket::homedir') %>
+
+###########################
+# Configuration Directory #
+###########################
+
+# specify your directory below (don't forget to remove the '#' in front)
+
+bitbucket.home = <%= scope.lookupvar('bitbucket::homedir') %>
+

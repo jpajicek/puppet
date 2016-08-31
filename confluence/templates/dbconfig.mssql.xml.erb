@@ -6,14 +6,13 @@
   <buildNumber><%= scope.lookupvar('confluence::build') %></buildNumber>
   <properties>
     <property name="attachments.dir">${confluenceHome}/attachments</property>
-    <property name="confluence.license.hash">mQnqSAEJwVSFdlpxiaMAMEMLmRPqasmCReVQrmmdGGOEwFmi2Kv&lt;iU1V8Ez&lt;MSNn8uysvC2Ki3xvO5GDiu2BtKV&lt;&gt;55&gt;</property>
-    <property name="confluence.license.message">qNnmMXGSFjWGNmdjuMXRoqXSpFCWSddQaAqqAUjLsoWHqXhEfdEVklDrljHQBbroSpISRxLVcHqXlRBqaFlWUtfcwDGvAFjHbsUjBhqntbqeMauoUrXkMeVVQapJPrtQQinnmdTpnCxaiNoXqiMBUbVRIRmxROTSREqOnpGDHdXLSklGBCRqppKbeKtpHJaJDNFdPAqEUsPVHnofiDfPRBUiTFUntfjAoJXQruxhdIHPLAtwDwNQrrkmueqRCFAxxKHAOEocEpJmsEfFxXQAxuRLSHNWLHfxMFWkImKJiRLoprWXUVeHHTIinjMWSfADECAFuQTGDk2mG4l&lt;ABz7bHGBIb69WKaq5YEziDIQuEgVKU&lt;604wm5pppjUjTYLSfKHeuEYnKGiVHuCIIZXQqMqAbjQ97AZ7OcjJWc2aTY&lt;Wcrh&lt;Hlsl6rXnO6aJ8dhEMPfl871KJVa1RQQaLezjHQMHkR6UG7aMxyEML89ChwMR7O&gt;00tDfEWTv0j0QizbWeCkETUBo5LLlPij9ibr7yPYYpL55&lt;dYtJwubTU8F9NDofC5TtRqiaBz5AOUWT&gt;caPKC&gt;W&lt;VDI7IVcMpqyQ7R9Q5ba&lt;SCJf6SmzQEoRJb&gt;67ffQXnBUScVWm&gt;z&gt;0BKL6</property>
-    <property name="confluence.setup.server.id">ALZN-HFBG-DJSF-EX3V</property>
+    <property name="atlassian.license.message">XXXXXXXX XXXXXXXX XXXXXXX</property>
+    <property name="confluence.setup.server.id">XXXX-XXXX-XXXX-XXXX</property>
     <property name="confluence.webapp.context.path"><%= scope.lookupvar('confluence::webappcontextpath') %></property>
     <property name="daily.backup.dir"><%= scope.lookupvar('confluence::homedir') %>/backups</property>
     <property name="hibernate.c3p0.acquire_increment">1</property>
     <property name="hibernate.c3p0.idle_test_period">100</property>
-    <property name="hibernate.c3p0.max_size">30</property>
+    <property name="hibernate.c3p0.max_size">55</property>
     <property name="hibernate.c3p0.max_statements">0</property>
     <property name="hibernate.c3p0.min_size">0</property>
     <property name="hibernate.c3p0.timeout">30</property>
@@ -24,7 +23,7 @@
     <property name="hibernate.database.lower_non_ascii_supported">true</property>
     <property name="hibernate.dialect">net.sf.hibernate.dialect.SQLServerDialect</property>
     <property name="hibernate.setup">true</property>
-    <property name="lucene.index.dir">${confluenceHome}/index</property>
-    <property name="webwork.multipart.saveDir">${confluenceHome}/temp</property>
+    <property name="lucene.index.dir">${localHome}/index</property>
+    <property name="webwork.multipart.saveDir">${localHome}/temp</property>
   </properties>
 </confluence-configuration>

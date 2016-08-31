@@ -1,0 +1,10 @@
+jdbc.driver=<%= scope.lookupvar('bitbucket::dbdriver') %>
+jdbc.url=<%= scope.lookupvar('bitbucket::dburl')%>;
+jdbc.user=<%= scope.lookupvar('bitbucket::dbuser') %>
+jdbc.password=<%= scope.lookupvar('bitbucket::dbpassword') %>
+
+logging.logger.ROOT=INFO
+logging.logger.com.atlassian.bitbucket=INFO
+logging.logger.com.atlassian.bitbucket.scm.BaseCommand=DEBUG
+feature.public.access=<%= scope.lookupvar('bitbucket::feature_public_access') %>
+

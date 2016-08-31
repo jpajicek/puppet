@@ -11,5 +11,6 @@
     <username><%= scope.lookupvar('jira::dbuser') %></username>
     <password><%= scope.lookupvar('jira::dbpassword') %></password>
     <pool-size><%= scope.lookupvar('jira::poolsize') %></pool-size>
+    <validation-query>select 1</validation-query>
   </jdbc-datasource>
 </jira-database-config>

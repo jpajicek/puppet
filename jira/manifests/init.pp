@@ -25,14 +25,16 @@ class jira (
   $dbport       = '1433',
   $dbdriver     = 'net.sourceforge.jtds.jdbc.Driver',
   $dbtype       = 'mssql',
-  $poolsize     = '15',
+  $poolsize     = '25',
 
   # JVM Settings
   $javahome	= '',
+  $jvm_xms	= '256m',
   $jvm_xmx      = '2048m',
   $jvm_optional = '',
 
   # Misc Settings
+  $downloadFilename = '',
   $downloadURL  = 'http://www.atlassian.com/software/jira/downloads/binary/'
 
 ) {

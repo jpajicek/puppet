@@ -5,9 +5,15 @@ class jira::install {
 
   require jira
 
+  if $jira::downloadFilename == '' {
+     $fileName = "atlassian-${jira::product}-${jira::version}.${jira::format}" 
+  } else {
+     $fileName = "${jira::downloadFilename}" 
+  }
+
   exec { "download-${jira::product}-${jira::version}":
      cwd     => "${jira::installdir}",
-     command => "/usr/bin/wget -O atlassian-${jira::product}-${jira::version}.${jira::format} ${jira::downloadURL}/atlassian-${jira::product}-${jira::version}.${jira::format}",
+     command => "/usr/bin/wget -O atlassian-${jira::product}-${jira::version}.${jira::format} ${jira::downloadURL}/${fileName}",
      creates => "${jira::installdir}/atlassian-${jira::product}-${jira::version}.${jira::format}",
      timeout => 1200,        
   } ->

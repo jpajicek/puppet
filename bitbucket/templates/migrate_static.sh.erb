@@ -1,0 +1,26 @@
+#!/bin/bash
+
+
+IP=$1
+USER=bitbucket
+
+
+if [[ -z $IP ]]; then
+
+echo "This script is use to rsync remote directories to the local server"
+echo "Usage: ./`basename $0` <remote ip>"
+exit
+fi
+
+<% if @version =~ /[2,3].[0,1].[0-9]/ %>
+su -c "rsync -av -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' $USER@$IP:~/config ~/" $USER
+su -c "rsync -av -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' $USER@$IP:~/data ~/" $USER
+su -c "rsync -av -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' $USER@$IP:~/bin ~/" $USER
+su -c "rsync -av -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' $USER@$IP:~/plugins ~/" $USER
+<% else %>
+su -c "rsync -av -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' $USER@$IP:~/shared/config ~/shared/" $USER
+su -c "rsync -av -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' $USER@$IP:~/shared/data ~/shared/" $USER
+su -c "rsync -av -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' $USER@$IP:~/bin ~/" $USER
+su -c "rsync -av -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' $USER@$IP:~/shared/plugins ~/shared/" $USER
+<% end %>
+

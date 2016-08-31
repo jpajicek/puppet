@@ -1,15 +1,7 @@
 
-class confluence::migrate (
-  $remote_server  = '', 
-  $remote_user    = 'confluence', 
-  $remote_home 	  = '/usr/local/confluence_home', 
-  $remote_dirs	  = ['attachments', 'imgEffects', 'resources', 'thumbnails', 'viewfile' ]
-  ) {
-  
+class confluence::migrate {
+ 
   require confluence
-
-  $remote_path_pref = prefix($remote_dirs, ":${remote_home}/")
-  $remote_path_real = suffix($remote_path_pref, ' ')
 
   file {"$confluence::homedir/.ssh":
     ensure  => directory,
@@ -32,14 +24,13 @@ class confluence::migrate (
     group   => "${confluence::user}",
     source  => "puppet:///modules/confluence/id_rsa",
     mode    => 0600,
-  } ->
-  
-  exec { "confluence_sync":
-    command => "rsync -az -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' ${remote_user}@${remote_server}${remote_path_real} ${confluence::homedir}/; touch ${confluence::homedir}/.migrated",
-    creates => "${confluence::homedir}/.migrated",
-    timeout => 0,
-    user    => "${confluence::user}",
   } 
+  
+  file { "${confluence::homedir}/migrate_static.sh":
+    content => template("confluence/migrate_static.sh.erb"),
+    mode    => '0700',
+    owner   => root,
+  }
   
 
 }

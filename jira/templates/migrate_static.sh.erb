@@ -1,0 +1,17 @@
+#!/bin/bash
+
+IP=$1
+USER=jira
+
+
+if [[ -z $IP ]]; then
+
+echo "This script is use to rsync remote directories to the local server"
+echo "Usage: ./`basename $0` <remote ip>"
+exit
+fi
+
+su -c "rsync -av -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' $USER@$IP:~/data ~/" $USER
+su -c "rsync -av -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' $USER@$IP:~/logos ~/" $USER
+su -c "rsync -av -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' $USER@$IP:~/caches ~/" $USER
+su -c "rsync -av -e 'ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' $USER@$IP:~/plugins ~/" $USER
