@@ -24,8 +24,8 @@ An example how to use this module:
        user        => 'jira1',
        group       => 'jira1',
        dbuser      => 'jiradb_user',
-       dbpassword  => 'Closed00r',
-       dbserver    => 'ldnwpatdb11',
+       dbpassword  => '123456',
+       dbserver    => 'dbserver',
        dbname      => 'jira_sandbox05_test',
     }
 
@@ -111,7 +111,7 @@ Example how to use:
 # Sandbox Manifest Example 
 
 
-    node /^ldnxvsand20.*$/ {
+    node /ldnxvsand20/ {
 
       class {"apt::debian::akqa": stage => prep }
       class {"apt::debian::puppetlabs": stage => prep }
@@ -123,8 +123,8 @@ Example how to use:
         user        => 'jira1',
         group       => 'jira1',
         dbuser      => 'jiradb_user',
-        dbpassword  => 'Closed00r',
-        dbserver    => 'ldnwpatdb11',
+        dbpassword  => '123456',
+        dbserver    => 'dbserver',
         dbname      => 'jira_sandbox05_test',
       }
 
